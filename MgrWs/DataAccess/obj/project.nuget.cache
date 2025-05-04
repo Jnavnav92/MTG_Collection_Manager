@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rLDBORvo+1g=",
+  "dgSpecHash": "Uvo8LkCn8Yc=",
   "success": true,
-  "projectFilePath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\DataAccess\\DataAccess.csproj",
+  "projectFilePath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\DataAccess\\DataAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Family PC\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Family PC\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gSy1+Z5afsA=",
+  "dgSpecHash": "qVZ9io2PYN0=",
   "success": true,
-  "projectFilePath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\MtgCollectionMgrWs.csproj",
+  "projectFilePath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\MtgCollectionMgrWs.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Family PC\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Family PC\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

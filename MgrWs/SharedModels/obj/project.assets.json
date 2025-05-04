@@ -107,11 +107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Shared.csproj",
+      "projectUniqueName": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\SharedModels\\Shared.csproj",
       "projectName": "Shared",
-      "projectPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Shared.csproj",
+      "projectPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\SharedModels\\Shared.csproj",
       "packagesPath": "C:\\Users\\Family PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\obj\\",
+      "outputPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\SharedModels\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

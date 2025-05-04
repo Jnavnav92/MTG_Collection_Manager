@@ -1,44 +1,32 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\",
+  "WorkspaceRootPath": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\",
   "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}|..\\DataAccess\\DataAccess.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\dataaccess\\dataaccessmethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C5A78703-9172-4192-B491-FEFCC36B1BA3}|..\\SDK\\SDK.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\sdk\\accountsdk.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Family PC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5bd3b740-afd8-46f1-a280-489304f5ac0e\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D077F300-7E58-4D3C-A8E2-00231B540FDF}|..\\SharedModels\\Shared.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\sharedmodels\\statics\\staticstrings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D077F300-7E58-4D3C-A8E2-00231B540FDF}|..\\SharedModels\\Shared.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\sharedmodels\\shared.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\providers\\providers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\providers\\providers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:providers\\providers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\ws\\mtgcollectionmgrws\\mtgcollectionmgrws.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "AbsoluteMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|c:\\personal dev projects\\mtg collection manager\\code\\mtg_collection_manager\\mgrws\\mtgcollectionmgrws\\mtgcollectionmgrws.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}|MtgCollectionMgrWs.csproj|solutionrelative:mtgcollectionmgrws.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
@@ -58,6 +46,18 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SharedModels\\Models\\ControllerResponseModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Shared.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SDK\\AccountSDK.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\DataAccess\\DataAccessMethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Statics\\StaticStrings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -67,15 +67,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Controllers\\AuthController.cs",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Controllers\\AuthController.cs",
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAUwBUAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -85,72 +85,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Shared",
+              "DocumentIndex": 13,
+              "Title": "Shared.csproj",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Shared.csproj",
-              "RelativeDocumentMoniker": "..\\SharedModels\\Shared.csproj",
+              "RelativeDocumentMoniker": "..\\..\\Ws\\SharedModels\\Shared.csproj",
               "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Shared.csproj",
-              "RelativeToolTip": "..\\SharedModels\\Shared.csproj",
+              "RelativeToolTip": "..\\..\\Ws\\SharedModels\\Shared.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-05-04T19:43:41.666Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:43:41.666Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 14,
               "Title": "AccountSDK.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SDK\\AccountSDK.cs",
-              "RelativeDocumentMoniker": "..\\SDK\\AccountSDK.cs",
+              "RelativeDocumentMoniker": "..\\..\\Ws\\SDK\\AccountSDK.cs",
               "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SDK\\AccountSDK.cs",
-              "RelativeToolTip": "..\\SDK\\AccountSDK.cs",
+              "RelativeToolTip": "..\\..\\Ws\\SDK\\AccountSDK.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAWwCYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T19:38:09.236Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:38:09.236Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 15,
               "Title": "DataAccessMethods.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\DataAccess\\DataAccessMethods.cs",
-              "RelativeDocumentMoniker": "..\\DataAccess\\DataAccessMethods.cs",
+              "RelativeDocumentMoniker": "..\\..\\Ws\\DataAccess\\DataAccessMethods.cs",
               "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\DataAccess\\DataAccessMethods.cs",
-              "RelativeToolTip": "..\\DataAccess\\DataAccessMethods.cs",
+              "RelativeToolTip": "..\\..\\Ws\\DataAccess\\DataAccessMethods.cs",
               "ViewState": "AgIAADkAAAAAAAAAAADwv0oAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T19:35:52.109Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:35:52.109Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 4,
               "Title": "Providers.cs",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Providers\\Providers.cs",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Providers\\Providers.cs",
               "RelativeDocumentMoniker": "Providers\\Providers.cs",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Providers\\Providers.cs",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Providers\\Providers.cs",
               "RelativeToolTip": "Providers\\Providers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T19:32:08.474Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:32:08.474Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 5,
               "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Properties\\launchSettings.json",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Properties\\launchSettings.json",
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-04T19:26:41.399Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:26:41.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 7,
               "Title": "ResponseFormatter.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SharedModels\\ResponseFormatter.cs",
               "RelativeDocumentMoniker": "..\\..\\SharedModels\\ResponseFormatter.cs",
@@ -162,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 8,
               "Title": "PWManager.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SharedModels\\PWManager.cs",
               "RelativeDocumentMoniker": "..\\..\\SharedModels\\PWManager.cs",
@@ -174,7 +169,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 9,
               "Title": "AccountModel.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SharedModels\\Models\\AccountModel.cs",
               "RelativeDocumentMoniker": "..\\..\\SharedModels\\Models\\AccountModel.cs",
@@ -186,7 +181,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 10,
               "Title": "DataAccessMethods.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\DataAccess\\DataAccessMethods.cs",
               "RelativeDocumentMoniker": "..\\..\\DataAccess\\DataAccessMethods.cs",
@@ -198,7 +193,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "secrets.json",
               "DocumentMoniker": "C:\\Users\\Family PC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5bd3b740-afd8-46f1-a280-489304f5ac0e\\secrets.json",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Users\\Family PC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5bd3b740-afd8-46f1-a280-489304f5ac0e\\secrets.json",
@@ -211,20 +206,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 16,
               "Title": "StaticStrings.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Statics\\StaticStrings.cs",
-              "RelativeDocumentMoniker": "..\\SharedModels\\Statics\\StaticStrings.cs",
+              "RelativeDocumentMoniker": "..\\..\\Ws\\SharedModels\\Statics\\StaticStrings.cs",
               "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\SharedModels\\Statics\\StaticStrings.cs",
-              "RelativeToolTip": "..\\SharedModels\\Statics\\StaticStrings.cs",
+              "RelativeToolTip": "..\\..\\Ws\\SharedModels\\Statics\\StaticStrings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T19:43:57.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T19:43:57.978Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 11,
               "Title": "AccountSDK.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SDK\\AccountSDK.cs",
               "RelativeDocumentMoniker": "..\\..\\SDK\\AccountSDK.cs",
@@ -236,33 +230,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\appsettings.json",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\appsettings.json",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-04T17:07:12.837Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T17:07:12.837Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Program.cs",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\Program.cs",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\Program.cs",
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAABkAAAAAAAAAAADwvygAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T16:09:30.238Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-04T16:09:30.238Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 12,
               "Title": "ControllerResponseModel.cs",
               "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\SharedModels\\Models\\ControllerResponseModel.cs",
               "RelativeDocumentMoniker": "..\\..\\SharedModels\\Models\\ControllerResponseModel.cs",
@@ -274,11 +266,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 6,
               "Title": "MtgCollectionMgrWs.http",
-              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\MtgCollectionMgrWs.http",
+              "DocumentMoniker": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\MtgCollectionMgrWs.http",
               "RelativeDocumentMoniker": "MtgCollectionMgrWs.http",
-              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\Ws\\MtgCollectionMgrWs\\MtgCollectionMgrWs.http",
+              "ToolTip": "C:\\Personal Dev Projects\\MTG Collection Manager\\Code\\MTG_Collection_Manager\\MgrWs\\MtgCollectionMgrWs\\MtgCollectionMgrWs.http",
               "RelativeToolTip": "MtgCollectionMgrWs.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",

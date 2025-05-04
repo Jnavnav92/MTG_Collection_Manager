@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SDK")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35fd42d2bd41e2b314e94093497a01326e8a0d90")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da50a5d59e4b860be2d526addf3688cc521f8067")]
 [assembly: System.Reflection.AssemblyProductAttribute("SDK")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SDK")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
