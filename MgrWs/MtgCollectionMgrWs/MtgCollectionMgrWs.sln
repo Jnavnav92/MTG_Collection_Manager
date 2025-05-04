@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtgCollectionMgrWs", "MtgCollectionMgrWs.csproj", "{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Layers", "Layers", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{5E6037BA-9858-4E72-9380-D442E1664E74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{3B389B58-662C-4720-8DF1-91E1B01FD476}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDK", "..\SDK\SDK.csproj", "{C5A78703-9172-4192-B491-FEFCC36B1BA3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{697C9FC3-6000-45D5-9B7C-38D01A988FF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "..\SharedModels\Shared.csproj", "{D077F300-7E58-4D3C-A8E2-00231B540FDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "..\DataAccess\DataAccess.csproj", "{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F514E7D-44FB-414D-A9ED-73B5FBAE823A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A78703-9172-4192-B491-FEFCC36B1BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A78703-9172-4192-B491-FEFCC36B1BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A78703-9172-4192-B491-FEFCC36B1BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A78703-9172-4192-B491-FEFCC36B1BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D077F300-7E58-4D3C-A8E2-00231B540FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D077F300-7E58-4D3C-A8E2-00231B540FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D077F300-7E58-4D3C-A8E2-00231B540FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D077F300-7E58-4D3C-A8E2-00231B540FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E6037BA-9858-4E72-9380-D442E1664E74} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{3B389B58-662C-4720-8DF1-91E1B01FD476} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C5A78703-9172-4192-B491-FEFCC36B1BA3} = {5E6037BA-9858-4E72-9380-D442E1664E74}
+		{D077F300-7E58-4D3C-A8E2-00231B540FDF} = {697C9FC3-6000-45D5-9B7C-38D01A988FF5}
+		{67BC0A07-5D9B-4365-99D3-CCA5AFBDD1D3} = {3B389B58-662C-4720-8DF1-91E1B01FD476}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18D7ECF0-D04E-4592-B671-B98F3489F5A8}
+	EndGlobalSection
+EndGlobal

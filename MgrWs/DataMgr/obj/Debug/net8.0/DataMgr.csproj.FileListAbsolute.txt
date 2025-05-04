@@ -1,0 +1,14 @@
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\bin\Debug\net8.0\DataMgr.deps.json
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\bin\Debug\net8.0\DataMgr.runtimeconfig.json
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\bin\Debug\net8.0\DataMgr.dll
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\bin\Debug\net8.0\DataMgr.pdb
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.csproj.AssemblyReference.cache
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.AssemblyInfoInputs.cache
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.AssemblyInfo.cs
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.csproj.CoreCompileInputs.cache
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.dll
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\refint\DataMgr.dll
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.pdb
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\DataMgr.genruntimeconfig.cache
+C:\Personal Dev Projects\MTG Collection Manager\Code\MTG_Collection_Manager\DataMgr\obj\Debug\net8.0\ref\DataMgr.dll

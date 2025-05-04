@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "MtgCollectionMgrWs.Controllers.AuthController",
+    "Method": "CreateAccountAsync",
+    "RelativePath": "api/Auth/CreateAccount",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createAccount",
+        "Type": "Shared.Models.AccountModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

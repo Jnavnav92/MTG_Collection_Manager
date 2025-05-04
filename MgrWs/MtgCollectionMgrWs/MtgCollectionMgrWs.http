@@ -1,0 +1,6 @@
+@MtgCollectionMgrWs_HostAddress = http://localhost:5189
+
+GET {{MtgCollectionMgrWs_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
