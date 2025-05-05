@@ -10,5 +10,6 @@ namespace Shared.Models
     {
         public bool Success { get; set; }
         public required string Message { get; set; }
+        public required string JWTToken { get; set; }
     }
 }

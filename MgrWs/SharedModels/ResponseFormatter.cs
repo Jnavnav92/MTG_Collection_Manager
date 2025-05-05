@@ -10,12 +10,13 @@ namespace Shared
 {
     public static class ResponseFormatter
     {
-        public static string FormatResponse(bool bSuccess, string Result)
+        public static string FormatResponse(bool bSuccess, string Result, string JwtToken = "")
         {
             ControllerResponseModel responseModel = new ControllerResponseModel()
             {
                 Success = bSuccess,
-                Message = Result
+                Message = Result,
+                JWTToken = JwtToken
             };
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(responseModel);

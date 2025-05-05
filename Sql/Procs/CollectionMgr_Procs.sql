@@ -26,3 +26,27 @@ BEGIN
 	END
 END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[proc_Get_LoginAccountRecord]
+@_iEmailAddress NVARCHAR(500)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS (select 1 from Acct_Accounts WHERE EmailAddress = @_iEmailAddress)
+	BEGIN
+		select EmailAddress as 'EmailAddress', 
+		PWHash as 'PasswordHash',
+		'True' as 'QueryResult', 
+		'Retrieved Login Record' as 'QueryMessage'
+		from Acct_Accounts with (nolock)
+		where EmailAddress = @_iEmailAddress
+
+	END
+	ELSE
+	BEGIN
+		select 'False' as 'QueryResult', 
+		'No Login Record' as 'QueryMessage'
+	END
+END
+GO

@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MtgCollectionMgrWs.Providers;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //
-var sqlConnString = builder.Configuration["MTGCollectionMgr:ConnString"];
+string jwtSecret = builder.Configuration["MTGCollectionMgr:JwtSecret"]!;
 
 //load the json file.
 builder.Configuration.AddJsonFile("secrets.json",
@@ -13,12 +16,26 @@ builder.Configuration.AddJsonFile("secrets.json",
 //register the service 
 builder.Services.AddScoped<IDataRepository, DataRepository>();
 
-//get the value from the secrets.json file
-var name = builder.Configuration.GetSection("MTGCollectionMgr:ConnString").Value;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "MtgCollectionMgr",
+            ValidAudience = "MtgCollectionMgr",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
+        };
+    });
 
-// Add services to the container.
+builder.Services.AddControllersWithViews();
+
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -34,6 +51,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

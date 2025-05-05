@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Shared.Statics;
+using System.Data;
+using System.Runtime.CompilerServices;
 using System.Transactions;
 
 namespace DataAccess
@@ -7,12 +9,13 @@ namespace DataAccess
     public class DataAccessMethods
     {
         private string connectionString { get; set; }
+
         public DataAccessMethods(string sConnectionString)
         {
             connectionString = sConnectionString;
         }
 
-        public async Task<(bool bQueryResult, string sQueryMessage)> CreateAccountAsync(string sEmailAddress, string sPWHash)
+        public async Task<damReturnModel> CreateAccountAsync(string sEmailAddress, string sPWHash)
         {
             List<SqlParameter> liParameters = new List<SqlParameter>()
             {
@@ -47,15 +50,31 @@ namespace DataAccess
                 }
             };
 
-            return await RunStoredProcedureAsync(StaticStrings.CREATE_ACCOUNT_PROC, liParameters);
+            return await RunStoredProcedureAsync(StaticStrings.CREATE_ACCOUNT_PROC, liParameters, DatabaseAccessType.NonQuery);
         }
 
-        public async Task<(bool bQueryResult, string sQueryMessage)> RunStoredProcedureAsync(string sStoredProcName, List<SqlParameter> sqlParameters)
+        public async Task<damReturnModel> GetLoginRecordAsync(string sEmailAddress)
         {
-            List<SqlParameter> liOutParams = [.. sqlParameters.Where(x => x.Direction == System.Data.ParameterDirection.Output)];
+            List<SqlParameter> liParameters = new List<SqlParameter>()
+            {
+                new SqlParameter()
+                {
+                    ParameterName = "@_iEmailAddress",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    Direction = System.Data.ParameterDirection.Input,
+                    Size = 1000, //nvarchar is 2 bytes per character
+                    Value = sEmailAddress
+                }
+            };
 
-            bool bQueryResult = false;
-            string sQueryMessage = string.Empty;
+            return await RunStoredProcedureAsync(StaticStrings.LOGIN_ACCOUNT_PROC, liParameters, DatabaseAccessType.Read);
+        }
+
+
+        public async Task<damReturnModel> RunStoredProcedureAsync(string sStoredProcName, List<SqlParameter> sqlParameters, DatabaseAccessType daType)
+        {
+            List<SqlParameter> liOutParams = new List<SqlParameter>();
+            damReturnModel daModel = new damReturnModel();
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -70,23 +89,57 @@ namespace DataAccess
 
                         command.Parameters.AddRange(sqlParameters.ToArray());
 
-                        await command.ExecuteNonQueryAsync();
-
-                        foreach (SqlParameter outParam in liOutParams)
+                        switch (daType)
                         {
-                            switch (outParam.ParameterName)
-                            {
-                                case "@_oQueryResult":
-                                    bQueryResult = bool.Parse(outParam.Value!.ToString()!);
-                                    break;
+                            case DatabaseAccessType.NonQuery:
 
-                                case "@_oQueryMessage":
-                                    sQueryMessage = outParam.Value.ToString()!;
-                                    break;
+                                liOutParams.AddRange([.. sqlParameters.Where(x => x.Direction == System.Data.ParameterDirection.Output)]);
 
-                                default:
-                                    break;
-                            }
+                                await command.ExecuteNonQueryAsync();
+
+                                foreach (SqlParameter outParam in liOutParams)
+                                {
+                                    switch (outParam.ParameterName)
+                                    {
+                                        case "@_oQueryResult":
+                                            daModel.QueryResult = bool.Parse(outParam.Value.ToString()!);
+                                            break;
+
+                                        case "@_oQueryMessage":
+                                            daModel.QueryMessage = outParam.Value.ToString()!;
+                                            break;
+
+                                        default:
+                                            break;
+                                    }
+                                }
+
+                                break;
+
+                            case DatabaseAccessType.Read:
+                                using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                                {
+                                    //always only returns 1 record
+                                    if (reader.Read())
+                                    {
+                                        if (DataAccessMethodsExtensions.HasColumn(reader, "EmailAddress") == true)
+                                        {
+                                            daModel.EmailAddress = reader["EmailAddress"].ToString();
+                                        }
+
+                                        if (DataAccessMethodsExtensions.HasColumn(reader, "PasswordHash") == true)
+                                        {
+                                            daModel.PasswordHash = reader["PasswordHash"].ToString();
+                                        }
+
+                                        daModel.QueryResult = bool.Parse(reader["QueryResult"].ToString()!);
+                                        daModel.QueryMessage = reader["QueryMessage"].ToString();
+                                    }
+                                }
+                                break;
+
+                            default:
+                                break;
                         }
                     }
                 }
@@ -94,7 +147,13 @@ namespace DataAccess
                 scope.Complete();
             }
 
-            return (bQueryResult!, sQueryMessage!);
+            return daModel;
+        }
+
+        public enum DatabaseAccessType
+        {
+            NonQuery = 0,
+            Read = 1
         }
     }
 }

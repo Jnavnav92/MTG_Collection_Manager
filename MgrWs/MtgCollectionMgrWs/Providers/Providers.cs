@@ -3,6 +3,7 @@
     public interface IDataRepository
     {
         string GetConnectionString();
+        string GetJwtSecret();
     }
     public class DataRepository : IDataRepository
     {
@@ -16,6 +17,11 @@
         public string GetConnectionString()
         {
             return _config.GetSection("MTGCollectionMgr:ConnString").Value;
+        }
+
+        public string GetJwtSecret()
+        {
+            return _config.GetSection("MTGCollectionMgr:JwtSecret").Value;
         }
     }
 }
