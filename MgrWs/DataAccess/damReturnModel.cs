@@ -14,5 +14,7 @@ namespace DataAccess
 
         public string? EmailAddress { get; set; }
         public string? PasswordHash { get; set; }
+
+        public Guid? AuthorizationToken { get; set; }
     }
 }

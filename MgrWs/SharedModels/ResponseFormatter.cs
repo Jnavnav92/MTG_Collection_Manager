@@ -12,12 +12,25 @@ namespace Shared
     {
         public static string FormatResponse(bool bSuccess, string Result, string JwtToken = "")
         {
-            ControllerResponseModel responseModel = new ControllerResponseModel()
+            ControllerResponseModel responseModel;
+
+            if (string.IsNullOrEmpty(JwtToken) == false)
             {
-                Success = bSuccess,
-                Message = Result,
-                JWTToken = JwtToken
-            };
+                responseModel = new ControllerResponseModelExtended()
+                {
+                    Success = bSuccess,
+                    Message = Result,
+                    JWTToken = JwtToken
+                };
+            }
+            else
+            {
+                responseModel = new ControllerResponseModel()
+                {
+                    Success = bSuccess,
+                    Message = Result
+                };
+            }
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(responseModel);
         }

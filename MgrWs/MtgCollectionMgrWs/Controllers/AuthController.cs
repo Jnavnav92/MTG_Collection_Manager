@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MtgCollectionMgrWs.Providers;
 using MtgCollectionMgrWs.SDK;
+using Newtonsoft.Json.Linq;
+using SDK;
 using Shared;
 using Shared.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -25,7 +28,7 @@ namespace MtgCollectionMgrWs.Controllers
 
         [HttpPost]
         [Route("CreateAccount")]
-        public async Task<IActionResult> CreateAccount([FromBody] AccountModel createAccount)
+        public async Task<IActionResult> CreateAccount([FromBody] AccountModelUserCredentials createAccount)
         {
             string sResponseJson = string.Empty;
             bool bSuccessful = false;
@@ -34,7 +37,12 @@ namespace MtgCollectionMgrWs.Controllers
             {
                 string sConnectionString = await GetConnectionStringAsync();
 
-                AccountSDK acctSDK = new AccountSDK(sConnectionString);
+                AccountSDK acctSDK = new AccountSDK()
+                {
+                    connString = sConnectionString,
+                    smtpEmail = _datarepo.GetSMTPEmail(),
+                    smtpPassword = _datarepo.GetSMTPPassword()
+                };
 
                 string sCreateAccountResult = await acctSDK.CreateAccountAsync(createAccount);
 
@@ -61,7 +69,7 @@ namespace MtgCollectionMgrWs.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] AccountModel loginAccount)
+        public async Task<IActionResult> Login([FromBody] AccountModelUserCredentials loginAccount)
         {
             string sResponseJson = string.Empty;
             bool bSuccessful = false;
@@ -70,11 +78,14 @@ namespace MtgCollectionMgrWs.Controllers
             {
                 string sConnectionString = await GetConnectionStringAsync();
 
-                AccountSDK acctSDK = new AccountSDK(sConnectionString);
+                AccountSDK acctSDK = new AccountSDK()
+                {
+                    connString = sConnectionString
+                };
 
-                (bool bSuccessfulLogin, string sMessage) result = await acctSDK.LoginAccountAsync(loginAccount);
+                SDK_Auth_Return_Model result = await acctSDK.LoginAccountAsync(loginAccount);
 
-                if (result.bSuccessfulLogin == false)
+                if (result.bSuccess == false)
                 {
                     bSuccessful = false;
                     //no account found for this login, prompt caller to create an account.
@@ -85,7 +96,7 @@ namespace MtgCollectionMgrWs.Controllers
                     bSuccessful = true;
 
                     //successful login, generate JWT token for UI to utilize.
-                    string JwtToken = await GenerateJwtTokenAsync(loginAccount.EmailAddress);
+                    string JwtToken = await JWTHelper.GenerateJwtTokenAsync(loginAccount.EmailAddress, _datarepo.GetJwtSecret());
 
                     sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage, JwtToken);
                 }
@@ -109,27 +120,99 @@ namespace MtgCollectionMgrWs.Controllers
             }
         }
 
-        private async Task<string> GenerateJwtTokenAsync(string username)
+
+        [HttpPost]
+        [Route("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] BaseAccountModel forgotPasswordAccount)
         {
-            var claims = new[]
+            string sResponseJson = string.Empty;
+            bool bSuccessful = false;
+
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                string sConnectionString = await GetConnectionStringAsync();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_datarepo.GetConnectionString()));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                AccountSDK acctSDK = new AccountSDK()
+                { 
+                    connString = sConnectionString
+                };
 
-            var token = new JwtSecurityToken(
-                issuer: "MtgCollectionMgr",
-                audience: "MtgCollectionMgr",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
+                SDK_Auth_Return_Model result = await acctSDK.ForgotPasswordAsync(forgotPasswordAccount);
 
-            return await Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
+                bSuccessful = result.bSuccess;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage);
+            }
+            catch (Exception ex)
+            {
+                //log full stack trace somewhere
+
+                bSuccessful = false;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, ex.Message);
+            }
+
+            if (bSuccessful == true)
+            {
+                return Ok(sResponseJson);
+            }
+            else
+            {
+                return BadRequest(sResponseJson);
+            }
         }
 
+        [HttpPost]
+        [Route("ResetPassword")]
+        //[Authorize]
+        public async Task<IActionResult> ResetPassword([FromBody] AccountModelUserCredentials resetPasswordAccount)
+        {
+            string sResponseJson = string.Empty;
+            bool bSuccessful = false;
+
+            try
+            {
+                string sConnectionString = await GetConnectionStringAsync();
+
+                AccountSDK acctSDK = new AccountSDK()
+                {
+                    connString = sConnectionString
+                };
+
+                SDK_Auth_Return_Model result = await acctSDK.ResetPasswordAsync(resetPasswordAccount);
+
+                bSuccessful = result.bSuccess;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage);
+            }
+            catch (Exception ex)
+            {
+                //log full stack trace somewhere
+
+                bSuccessful = false;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, ex.Message);
+            }
+
+            if (bSuccessful == true)
+            {
+                return Ok(sResponseJson);
+            }
+            else
+            {
+                return BadRequest(sResponseJson);
+            }
+        }
+
+
+
+        //[HttpPost]
+        //[Route("VerifyAccount")]
+        //[Authorize]
+        //public async Task<IActionResult> VerifyAccount([FromBody] AccountModel loginAccount)
+        //{
+
+        //}
 
 
         private async Task<string> GetConnectionStringAsync()

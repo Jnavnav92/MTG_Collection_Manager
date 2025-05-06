@@ -10,6 +10,7 @@ namespace Shared.Statics
     {
         //procs
         public const string CREATE_ACCOUNT_PROC = "dbo.proc_CreateAccount";
-        public const string LOGIN_ACCOUNT_PROC = "dbo.proc_Get_LoginAccountRecord";
+        public const string LOGIN_ACCOUNT_PROC = "dbo.proc_Get_LoginAccount";
+        public const string UPDATE_ACCOUNT_PASSWORD_PROC = "dbo.proc_UpdateAccountPassword";
     }
 }

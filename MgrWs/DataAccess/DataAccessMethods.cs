@@ -1,5 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
+using Org.BouncyCastle.Crypto.Macs;
+using Shared.Models;
 using Shared.Statics;
+using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Transactions;
@@ -8,16 +11,30 @@ namespace DataAccess
 {
     public class DataAccessMethods
     {
-        private string connectionString { get; set; }
+        public string connectionString { get; set; } = string.Empty;
 
-        public DataAccessMethods(string sConnectionString)
+        public DataAccessMethods()
         {
-            connectionString = sConnectionString;
+
         }
 
-        public async Task<damReturnModel> CreateAccountAsync(string sEmailAddress, string sPWHash)
+        public async Task<damReturnModel> UpdatePasswordAsync(BaseAccountModel account, string sPWHash)
         {
-            List<SqlParameter> liParameters = new List<SqlParameter>()
+            List<SqlParameter> liParameters = GetStandardUserLoginParams(account, sPWHash);
+
+            return await RunStoredProcedureAsync(StaticStrings.UPDATE_ACCOUNT_PASSWORD_PROC, liParameters, DatabaseAccessType.NonQuery);
+        }
+
+        public async Task<damReturnModel> CreateAccountAsync(BaseAccountModel account, string sPWHash)
+        {
+            List<SqlParameter> liParameters = GetStandardUserLoginParams(account, sPWHash);
+
+            return await RunStoredProcedureAsync(StaticStrings.CREATE_ACCOUNT_PROC, liParameters, DatabaseAccessType.NonQuery);
+        }
+
+        private List<SqlParameter> GetStandardUserLoginParams(BaseAccountModel account, string sPWHash)
+        {
+            return new List<SqlParameter>()
             {
                 new SqlParameter()
                 {
@@ -25,7 +42,7 @@ namespace DataAccess
                     SqlDbType = System.Data.SqlDbType.NVarChar,
                     Direction = System.Data.ParameterDirection.Input,
                     Size = 1000, //nvarchar is 2 bytes per character
-                    Value = sEmailAddress
+                    Value = account.EmailAddress
                 },
                 new SqlParameter()
                 {
@@ -49,8 +66,6 @@ namespace DataAccess
                     Direction = System.Data.ParameterDirection.Output
                 }
             };
-
-            return await RunStoredProcedureAsync(StaticStrings.CREATE_ACCOUNT_PROC, liParameters, DatabaseAccessType.NonQuery);
         }
 
         public async Task<damReturnModel> GetLoginRecordAsync(string sEmailAddress)
@@ -107,6 +122,10 @@ namespace DataAccess
 
                                         case "@_oQueryMessage":
                                             daModel.QueryMessage = outParam.Value.ToString()!;
+                                            break;
+
+                                        case "@_oAuthorizationToken":
+                                            daModel.AuthorizationToken = Guid.Parse(outParam.Value.ToString()!);
                                             break;
 
                                         default:
