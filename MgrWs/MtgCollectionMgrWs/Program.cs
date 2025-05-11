@@ -1,4 +1,7 @@
+using DataAccess.Data;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MtgCollectionMgrWs.Providers;
 using System.Text;
@@ -32,7 +35,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddControllersWithViews();
-
 
 builder.Services.AddControllers();
 

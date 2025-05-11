@@ -42,7 +42,6 @@ namespace Shared
 
             message.Body = msgBody.ToMessageBody();
 
-
             await SendEmailAsync(SMTPEmail, SMTPPassword, message);
         }
 

@@ -1,9 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DataAccess.Data;
+using DataAccess.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Macs;
 using Shared.Models;
 using Shared.Statics;
 using System.Collections.Generic;
 using System.Data;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Transactions;
 
@@ -20,159 +24,205 @@ namespace DataAccess
 
         public async Task<damReturnModel> UpdatePasswordAsync(BaseAccountModel account, string sPWHash)
         {
-            List<SqlParameter> liParameters = GetStandardUserLoginParams(account, sPWHash);
+            damReturnModel dam = new damReturnModel();
 
-            return await RunStoredProcedureAsync(StaticStrings.UPDATE_ACCOUNT_PASSWORD_PROC, liParameters, DatabaseAccessType.NonQuery);
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
+            {
+                if (db.AcctAccounts.Any(x => x.EmailAddress == account.EmailAddress) == true)
+                {
+                    AcctAccount acctAccount = await db.AcctAccounts.Where(x => x.EmailAddress == account.EmailAddress).FirstAsync();
+
+                    acctAccount.Pwhash = sPWHash;
+                    await db.SaveChangesAsync();
+
+                    dam.QueryResult = true;
+                    dam.QueryMessage = "Successfully Updated Password!";
+                }
+                else
+                {
+                    dam.QueryResult = false;
+                    dam.QueryMessage = "Email Does Not Exist";
+                }
+            }
+
+            return dam;
         }
 
         public async Task<damReturnModel> CreateAccountAsync(BaseAccountModel account, string sPWHash)
         {
-            List<SqlParameter> liParameters = GetStandardUserLoginParams(account, sPWHash);
+            damReturnModel dam = new damReturnModel();
 
-            return await RunStoredProcedureAsync(StaticStrings.CREATE_ACCOUNT_PROC, liParameters, DatabaseAccessType.NonQuery);
-        }
-
-        private List<SqlParameter> GetStandardUserLoginParams(BaseAccountModel account, string sPWHash)
-        {
-            return new List<SqlParameter>()
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                new SqlParameter()
+                if (db.AcctAccounts.Any(x => x.EmailAddress == account.EmailAddress) == true)
                 {
-                    ParameterName = "@_iEmailAddress",
-                    SqlDbType = System.Data.SqlDbType.NVarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 1000, //nvarchar is 2 bytes per character
-                    Value = account.EmailAddress
-                },
-                new SqlParameter()
-                {
-                    ParameterName = "@_iPWhash",
-                    SqlDbType = System.Data.SqlDbType.Char,
-                    Size = 60, //1 byte per character 
-                    Direction = System.Data.ParameterDirection.Input,
-                    Value = sPWHash
-                },
-                new SqlParameter()
-                {
-                    ParameterName = "@_oQueryResult",
-                    SqlDbType = System.Data.SqlDbType.Bit,
-                    Direction = System.Data.ParameterDirection.Output
-                },
-                new SqlParameter()
-                {
-                    ParameterName = "@_oQueryMessage",
-                    SqlDbType = System.Data.SqlDbType.NVarChar,
-                    Size = 8000, //nvarchar is 2 bytes per character
-                    Direction = System.Data.ParameterDirection.Output
+                    dam.QueryResult = false;
+                    dam.QueryMessage = "Email Already Exists";
                 }
-            };
+                else
+                {
+                    Guid gAuthToken = Guid.NewGuid();
+
+                    db.Add(new AcctAccount { AccountId = Guid.NewGuid(), EmailAddress = account.EmailAddress , Pwhash = sPWHash, AuthorizationToken = gAuthToken });
+                    await db.SaveChangesAsync();
+
+                    dam.QueryResult = true;
+                    dam.QueryMessage = "Successfully Created Account!";
+                    dam.AuthorizationToken = gAuthToken;
+                }
+            }
+
+            return dam;
         }
 
         public async Task<damReturnModel> GetLoginRecordAsync(string sEmailAddress)
         {
-            List<SqlParameter> liParameters = new List<SqlParameter>()
+            damReturnModel dam = new damReturnModel();
+
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                new SqlParameter()
+                if (db.AcctAccounts.Any(x => x.EmailAddress == sEmailAddress) == true)
                 {
-                    ParameterName = "@_iEmailAddress",
-                    SqlDbType = System.Data.SqlDbType.NVarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 1000, //nvarchar is 2 bytes per character
-                    Value = sEmailAddress
+                    AcctAccount account = await db.AcctAccounts.Where(x => x.EmailAddress == sEmailAddress).FirstAsync();
+
+                    dam.EmailAddress = account.EmailAddress;
+                    dam.PasswordHash = account.Pwhash;
+                    dam.QueryResult = true;
+                    dam.QueryMessage = "Retrieved Login Record";
                 }
-            };
-
-            return await RunStoredProcedureAsync(StaticStrings.LOGIN_ACCOUNT_PROC, liParameters, DatabaseAccessType.Read);
-        }
-
-
-        public async Task<damReturnModel> RunStoredProcedureAsync(string sStoredProcName, List<SqlParameter> sqlParameters, DatabaseAccessType daType)
-        {
-            List<SqlParameter> liOutParams = new List<SqlParameter>();
-            damReturnModel daModel = new damReturnModel();
-
-            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                else
                 {
-                    await conn.OpenAsync();
-
-                    using (SqlCommand command = conn.CreateCommand())
-                    {
-                        command.CommandType = System.Data.CommandType.StoredProcedure;
-                        command.CommandText = sStoredProcName;
-
-                        command.Parameters.AddRange(sqlParameters.ToArray());
-
-                        switch (daType)
-                        {
-                            case DatabaseAccessType.NonQuery:
-
-                                liOutParams.AddRange([.. sqlParameters.Where(x => x.Direction == System.Data.ParameterDirection.Output)]);
-
-                                await command.ExecuteNonQueryAsync();
-
-                                foreach (SqlParameter outParam in liOutParams)
-                                {
-                                    switch (outParam.ParameterName)
-                                    {
-                                        case "@_oQueryResult":
-                                            daModel.QueryResult = bool.Parse(outParam.Value.ToString()!);
-                                            break;
-
-                                        case "@_oQueryMessage":
-                                            daModel.QueryMessage = outParam.Value.ToString()!;
-                                            break;
-
-                                        case "@_oAuthorizationToken":
-                                            daModel.AuthorizationToken = Guid.Parse(outParam.Value.ToString()!);
-                                            break;
-
-                                        default:
-                                            break;
-                                    }
-                                }
-
-                                break;
-
-                            case DatabaseAccessType.Read:
-                                using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                                {
-                                    //always only returns 1 record
-                                    if (reader.Read())
-                                    {
-                                        if (DataAccessMethodsExtensions.HasColumn(reader, "EmailAddress") == true)
-                                        {
-                                            daModel.EmailAddress = reader["EmailAddress"].ToString();
-                                        }
-
-                                        if (DataAccessMethodsExtensions.HasColumn(reader, "PasswordHash") == true)
-                                        {
-                                            daModel.PasswordHash = reader["PasswordHash"].ToString();
-                                        }
-
-                                        daModel.QueryResult = bool.Parse(reader["QueryResult"].ToString()!);
-                                        daModel.QueryMessage = reader["QueryMessage"].ToString();
-                                    }
-                                }
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
+                    dam.QueryResult = false;
+                    dam.QueryMessage = "No Login Record";
                 }
-
-                scope.Complete();
             }
 
-            return daModel;
+            return dam;
         }
 
-        public enum DatabaseAccessType
-        {
-            NonQuery = 0,
-            Read = 1
-        }
+        //private List<SqlParameter> GetStandardUserLoginParams(BaseAccountModel account, string sPWHash)
+        //{
+        //    return new List<SqlParameter>()
+        //    {
+        //        new SqlParameter()
+        //        {
+        //            ParameterName = "@_iEmailAddress",
+        //            SqlDbType = System.Data.SqlDbType.NVarChar,
+        //            Direction = System.Data.ParameterDirection.Input,
+        //            Size = 1000, //nvarchar is 2 bytes per character
+        //            Value = account.EmailAddress
+        //        },
+        //        new SqlParameter()
+        //        {
+        //            ParameterName = "@_iPWhash",
+        //            SqlDbType = System.Data.SqlDbType.Char,
+        //            Size = 60, //1 byte per character 
+        //            Direction = System.Data.ParameterDirection.Input,
+        //            Value = sPWHash
+        //        },
+        //        new SqlParameter()
+        //        {
+        //            ParameterName = "@_oQueryResult",
+        //            SqlDbType = System.Data.SqlDbType.Bit,
+        //            Direction = System.Data.ParameterDirection.Output
+        //        },
+        //        new SqlParameter()
+        //        {
+        //            ParameterName = "@_oQueryMessage",
+        //            SqlDbType = System.Data.SqlDbType.NVarChar,
+        //            Size = 8000, //nvarchar is 2 bytes per character
+        //            Direction = System.Data.ParameterDirection.Output
+        //        }
+        //    };
+        //}
+
+        //public async Task<damReturnModel> RunStoredProcedureAsync(string sStoredProcName, List<SqlParameter> sqlParameters, DatabaseAccessType daType)
+        //{
+        //    List<SqlParameter> liOutParams = new List<SqlParameter>();
+        //    damReturnModel daModel = new damReturnModel();
+
+        //    using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            await conn.OpenAsync();
+
+        //            using (SqlCommand command = conn.CreateCommand())
+        //            {
+        //                command.CommandType = System.Data.CommandType.StoredProcedure;
+        //                command.CommandText = sStoredProcName;
+
+        //                command.Parameters.AddRange(sqlParameters.ToArray());
+
+        //                switch (daType)
+        //                {
+        //                    case DatabaseAccessType.NonQuery:
+
+        //                        liOutParams.AddRange([.. sqlParameters.Where(x => x.Direction == System.Data.ParameterDirection.Output)]);
+
+        //                        await command.ExecuteNonQueryAsync();
+
+        //                        foreach (SqlParameter outParam in liOutParams)
+        //                        {
+        //                            switch (outParam.ParameterName)
+        //                            {
+        //                                case "@_oQueryResult":
+        //                                    daModel.QueryResult = bool.Parse(outParam.Value.ToString()!);
+        //                                    break;
+
+        //                                case "@_oQueryMessage":
+        //                                    daModel.QueryMessage = outParam.Value.ToString()!;
+        //                                    break;
+
+        //                                case "@_oAuthorizationToken":
+        //                                    daModel.AuthorizationToken = Guid.Parse(outParam.Value.ToString()!);
+        //                                    break;
+
+        //                                default:
+        //                                    break;
+        //                            }
+        //                        }
+
+        //                        break;
+
+        //                    case DatabaseAccessType.Read:
+        //                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+        //                        {
+        //                            //always only returns 1 record
+        //                            if (reader.Read())
+        //                            {
+        //                                if (DataAccessMethodsExtensions.HasColumn(reader, "EmailAddress") == true)
+        //                                {
+        //                                    daModel.EmailAddress = reader["EmailAddress"].ToString();
+        //                                }
+
+        //                                if (DataAccessMethodsExtensions.HasColumn(reader, "PasswordHash") == true)
+        //                                {
+        //                                    daModel.PasswordHash = reader["PasswordHash"].ToString();
+        //                                }
+
+        //                                daModel.QueryResult = bool.Parse(reader["QueryResult"].ToString()!);
+        //                                daModel.QueryMessage = reader["QueryMessage"].ToString();
+        //                            }
+        //                        }
+        //                        break;
+
+        //                    default:
+        //                        break;
+        //                }
+        //            }
+        //        }
+
+        //        scope.Complete();
+        //    }
+
+        //    return daModel;
+        //}
+
+        //public enum DatabaseAccessType
+        //{
+        //    NonQuery = 0,
+        //    Read = 1
+        //}
     }
 }

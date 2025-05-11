@@ -134,7 +134,9 @@ namespace MtgCollectionMgrWs.Controllers
 
                 AccountSDK acctSDK = new AccountSDK()
                 { 
-                    connString = sConnectionString
+                    connString = sConnectionString,
+                    smtpEmail = _datarepo.GetSMTPEmail(),
+                    smtpPassword = _datarepo.GetSMTPPassword()
                 };
 
                 SDK_Auth_Return_Model result = await acctSDK.ForgotPasswordAsync(forgotPasswordAccount);
