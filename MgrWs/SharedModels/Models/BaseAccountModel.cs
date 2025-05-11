@@ -1,11 +1,11 @@
 ﻿namespace Shared.Models
 {
-    public class AccountModelUserCredentialsAuth : AccountModelUserCredentials
+    public class VerifyEmailAuthModel
     {
         public Guid? AuthorizationToken { get; set; }
     }
 
-    public class AccountModelUserCredentials : BaseAccountModel
+    public class AccountModelUserCredentialsModel : BaseAccountModel
     {
         public required string UserPW { get; set; }
     }

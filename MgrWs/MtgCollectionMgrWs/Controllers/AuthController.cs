@@ -28,7 +28,7 @@ namespace MtgCollectionMgrWs.Controllers
 
         [HttpPost]
         [Route("CreateAccount")]
-        public async Task<IActionResult> CreateAccount([FromBody] AccountModelUserCredentials createAccount)
+        public async Task<IActionResult> CreateAccount([FromBody] AccountModelUserCredentialsModel createAccount)
         {
             string sResponseJson = string.Empty;
             bool bSuccessful = false;
@@ -69,7 +69,7 @@ namespace MtgCollectionMgrWs.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] AccountModelUserCredentials loginAccount)
+        public async Task<IActionResult> Login([FromBody] AccountModelUserCredentialsModel loginAccount)
         {
             string sResponseJson = string.Empty;
             bool bSuccessful = false;
@@ -89,16 +89,16 @@ namespace MtgCollectionMgrWs.Controllers
                 {
                     bSuccessful = false;
                     //no account found for this login, prompt caller to create an account.
-                    sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage);
+                    sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!);
                 }
                 else
                 {
                     bSuccessful = true;
 
-                    //successful login, generate JWT token for UI to utilize.
+                    //successful login for a verified account, generate JWT token for UI to utilize.
                     string JwtToken = await JWTHelper.GenerateJwtTokenAsync(loginAccount.EmailAddress, _datarepo.GetJwtSecret());
 
-                    sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage, JwtToken);
+                    sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!, JwtToken);
                 }
             }
             catch (Exception ex)
@@ -143,7 +143,7 @@ namespace MtgCollectionMgrWs.Controllers
 
                 bSuccessful = result.bSuccess;
 
-                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage);
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!);
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace MtgCollectionMgrWs.Controllers
         [HttpPost]
         [Route("ResetPassword")]
         //[Authorize]
-        public async Task<IActionResult> ResetPassword([FromBody] AccountModelUserCredentials resetPasswordAccount)
+        public async Task<IActionResult> ResetPassword([FromBody] AccountModelUserCredentialsModel resetPasswordAccount)
         {
             string sResponseJson = string.Empty;
             bool bSuccessful = false;
@@ -185,7 +185,50 @@ namespace MtgCollectionMgrWs.Controllers
 
                 bSuccessful = result.bSuccess;
 
-                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage);
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!);
+            }
+            catch (Exception ex)
+            {
+                //log full stack trace somewhere
+
+                bSuccessful = false;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, ex.Message);
+            }
+
+            if (bSuccessful == true)
+            {
+                return Ok(sResponseJson);
+            }
+            else
+            {
+                return BadRequest(sResponseJson);
+            }
+        }
+
+        [HttpPost]
+        [Route("ResendVerificationEmail")]
+        public async Task<IActionResult> ResendVerificationEmailAsync([FromBody] BaseAccountModel verifyModel)
+        {
+            string sResponseJson = string.Empty;
+            bool bSuccessful = false;
+
+            try
+            {
+                string sConnectionString = await GetConnectionStringAsync();
+
+                AccountSDK acctSDK = new AccountSDK()
+                {
+                    connString = sConnectionString,
+                    smtpEmail = _datarepo.GetSMTPEmail(),
+                    smtpPassword = _datarepo.GetSMTPPassword()
+                };
+
+                SDK_Auth_Return_Model result = await acctSDK.ResendVerificationEmailAsync(verifyModel);
+
+                bSuccessful = result.bSuccess;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!);
             }
             catch (Exception ex)
             {
@@ -207,14 +250,46 @@ namespace MtgCollectionMgrWs.Controllers
         }
 
 
+        [HttpPost]
+        [Route("VerifyAccount")]
+        public async Task<IActionResult> VerifyAccountAsync([FromBody] VerifyEmailAuthModel verifyModel)
+        {
+            string sResponseJson = string.Empty;
+            bool bSuccessful = false;
 
-        //[HttpPost]
-        //[Route("VerifyAccount")]
-        //[Authorize]
-        //public async Task<IActionResult> VerifyAccount([FromBody] AccountModel loginAccount)
-        //{
+            try
+            {
+                string sConnectionString = await GetConnectionStringAsync();
 
-        //}
+                AccountSDK acctSDK = new AccountSDK()
+                {
+                    connString = sConnectionString
+                };
+
+                SDK_Auth_Return_Model result = await acctSDK.VerifyAccountAsync(verifyModel);
+
+                bSuccessful = result.bSuccess;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, result.sMessage!);
+            }
+            catch (Exception ex)
+            {
+                //log full stack trace somewhere
+
+                bSuccessful = false;
+
+                sResponseJson = ResponseFormatter.FormatResponse(bSuccessful, ex.Message);
+            }
+
+            if (bSuccessful == true)
+            {
+                return Ok(sResponseJson);
+            }
+            else
+            {
+                return BadRequest(sResponseJson);
+            }
+        }
 
 
         private async Task<string> GetConnectionStringAsync()

@@ -19,7 +19,7 @@ namespace MtgCollectionMgrWs.SDK
 
         }
 
-        public async Task<string> CreateAccountAsync(AccountModelUserCredentials account)
+        public async Task<string> CreateAccountAsync(AccountModelUserCredentialsModel account)
         {
             //UI sends plaintext password, we will hash it via Bcrypt and save the hash.
 
@@ -42,8 +42,7 @@ namespace MtgCollectionMgrWs.SDK
             else
             {
                 //if we succeed in creating the account, we now need to send the verification email.
-
-                await SMTPHelper.SendEmailVerificationCodeAsync(account, (Guid)result.AuthorizationToken!, smtpEmail, smtpPassword, smtpCallbackURL);
+                await SendVerificationEmailAsync(account, (Guid)result.AuthorizationToken!);
             }
 
             return result.QueryMessage!;
@@ -62,7 +61,7 @@ namespace MtgCollectionMgrWs.SDK
             return returnModel;
         }
 
-        public async Task<SDK_Auth_Return_Model> ResetPasswordAsync(AccountModelUserCredentials account)
+        public async Task<SDK_Auth_Return_Model> ResetPasswordAsync(AccountModelUserCredentialsModel account)
         {
             //UI sends plaintext password, we store bcrypt hash for the user in the database.
 
@@ -105,7 +104,7 @@ namespace MtgCollectionMgrWs.SDK
         }
 
        
-        public async Task<SDK_Auth_Return_Model> LoginAccountAsync(AccountModelUserCredentials account)
+        public async Task<SDK_Auth_Return_Model> LoginAccountAsync(AccountModelUserCredentialsModel account)
         {
             //UI sends plaintext password, we store bcrypt hash for the user in the database.
 
@@ -126,6 +125,15 @@ namespace MtgCollectionMgrWs.SDK
 
                     returnModel.bSuccess = false;
                     returnModel.sMessage = $"No account found for this user: {account.EmailAddress}, please create an account.";
+
+                    return returnModel;
+                }
+                else if (damResult.QueryMessage!.Contains("Unverified") == true)
+                {
+                    //account not verified, deny login
+
+                    returnModel.bSuccess = false;
+                    returnModel.sMessage = $"Account for user: {account.EmailAddress} has not been verified. Please check your email, verify, and try again.";
 
                     return returnModel;
                 }
@@ -151,7 +159,77 @@ namespace MtgCollectionMgrWs.SDK
                     throw new Exception("Login Credentials are invalid.");
                 }
             }
+        }
 
+        public async Task<SDK_Auth_Return_Model> VerifyAccountAsync(VerifyEmailAuthModel verifyModel)
+        {
+            //UI sends plaintext password, we store bcrypt hash for the user in the database.
+
+            SDK_Auth_Return_Model returnModel = new SDK_Auth_Return_Model();
+
+            DataAccessMethods dam = new DataAccessMethods()
+            {
+                connectionString = connString
+            };
+
+            damReturnModel damResult = await dam.VerifyAccountAsync((Guid)verifyModel.AuthorizationToken!);
+
+            if (damResult.QueryResult == false)
+            {
+                if (damResult.QueryMessage!.Contains("No Login Record associated with Auth Token") == true)
+                {
+                    //login doesn't exist
+
+                    returnModel.bSuccess = false;
+                    returnModel.sMessage = $"No account found.";
+
+                    return returnModel;
+                }
+                else
+                {
+                    throw new Exception("Unable to login, CA_VF1");
+                }
+            }
+            else
+            {
+                returnModel.bSuccess = true;
+                returnModel.sMessage = "Successfully Verified Account.";
+
+            }
+
+            return returnModel;
+        }
+
+        public async Task<SDK_Auth_Return_Model> ResendVerificationEmailAsync(BaseAccountModel resendVerifyModel)
+        {
+            SDK_Auth_Return_Model returnModel = new SDK_Auth_Return_Model();
+
+            DataAccessMethods dam = new DataAccessMethods()
+            {
+                connectionString = connString
+            };
+
+            damReturnModel damResult = await dam.GetAuthTokenForReVerify(resendVerifyModel.EmailAddress);
+
+            if (damResult.QueryResult == true)
+            {
+                await SendVerificationEmailAsync(resendVerifyModel, (Guid)damResult.AuthorizationToken!);
+
+                returnModel.bSuccess = true;
+                returnModel.sMessage = "Re-Sent Verification Email.";
+            }
+            else
+            {
+                returnModel.bSuccess = false;
+                returnModel.sMessage = damResult.QueryMessage;
+            }
+
+                return returnModel;
+        }
+
+        private async Task SendVerificationEmailAsync(BaseAccountModel account, Guid AuthorizationToken)
+        {
+            await SMTPHelper.SendEmailVerificationCodeAsync(account, AuthorizationToken, smtpEmail, smtpPassword, smtpCallbackURL);
         }
     }
 }

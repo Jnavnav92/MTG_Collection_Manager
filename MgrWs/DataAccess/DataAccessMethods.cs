@@ -87,8 +87,17 @@ namespace DataAccess
 
                     dam.EmailAddress = account.EmailAddress;
                     dam.PasswordHash = account.Pwhash;
-                    dam.QueryResult = true;
-                    dam.QueryMessage = "Retrieved Login Record";
+
+                    if (account.AccountVerified == false)
+                    {
+                        dam.QueryResult = false;
+                        dam.QueryMessage = "Unverified";
+                    }
+                    else
+                    {
+                        dam.QueryResult = true;
+                        dam.QueryMessage = "Retrieved Login Record";
+                    }
                 }
                 else
                 {
@@ -99,6 +108,65 @@ namespace DataAccess
 
             return dam;
         }
+
+        public async Task<damReturnModel> GetAuthTokenForReVerify(string sEmailAddress)
+        {
+            damReturnModel dam = new damReturnModel();
+
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
+            {
+                if (db.AcctAccounts.Any(x => x.EmailAddress == sEmailAddress) == true)
+                {
+                    AcctAccount account = await db.AcctAccounts.Where(x => x.EmailAddress == sEmailAddress).FirstAsync();
+
+                    if (account.AccountVerified ==false)
+                    {
+                        dam.AuthorizationToken = account.AuthorizationToken;
+
+                        dam.QueryResult = true;
+                    }
+                    else
+                    {
+                        dam.QueryResult = true;
+                        dam.QueryMessage = "Already Verified";
+                    }
+                }
+                else
+                {
+                    dam.QueryResult = false;
+                    dam.QueryMessage = "No Login Record associated with Auth Token";
+                }
+            }
+
+            return dam;
+        }
+
+        public async Task<damReturnModel> VerifyAccountAsync(Guid AuthToken)
+        {
+            damReturnModel dam = new damReturnModel();
+
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
+            {
+                if (db.AcctAccounts.Any(x => x.AuthorizationToken == AuthToken) == true)
+                {
+                    AcctAccount account = await db.AcctAccounts.Where(x => x.AuthorizationToken == AuthToken).FirstAsync();
+
+                    account.AccountVerified = true;
+
+                    await db.SaveChangesAsync();
+
+                    dam.QueryResult = true;
+                }
+                else
+                {
+                    dam.QueryResult = false;
+                    dam.QueryMessage = "No Login Record associated with Auth Token";
+                }
+            }
+
+            return dam;
+        }
+
 
         //private List<SqlParameter> GetStandardUserLoginParams(BaseAccountModel account, string sPWHash)
         //{
