@@ -3,6 +3,7 @@ using DataAccess;
 using Microsoft.Data.SqlClient;
 using Shared;
 using SDK;
+using DataAccess.Models;
 
 namespace MtgCollectionMgrWs.SDK
 {

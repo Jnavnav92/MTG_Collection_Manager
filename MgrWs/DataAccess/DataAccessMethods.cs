@@ -28,9 +28,9 @@ namespace DataAccess
 
             using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                if (db.AcctAccounts.Any(x => x.EmailAddress == account.EmailAddress) == true)
+                if (await db.AcctAccounts.AnyAsync(x => x.EmailAddress == account.EmailAddress) == true)
                 {
-                    AcctAccount acctAccount = await db.AcctAccounts.Where(x => x.EmailAddress == account.EmailAddress).FirstAsync();
+                    AcctAccount acctAccount = await db.AcctAccounts.FirstAsync(x => x.EmailAddress == account.EmailAddress);
 
                     acctAccount.Pwhash = sPWHash;
                     await db.SaveChangesAsync();
@@ -54,10 +54,10 @@ namespace DataAccess
 
             using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                if (db.AcctAccounts.Any(x => x.EmailAddress == account.EmailAddress) == true)
+                if (await db.AcctAccounts.AnyAsync(x => x.EmailAddress == account.EmailAddress) == true)
                 {
                     dam.QueryResult = false;
-                    dam.QueryMessage = "Email Already Exists";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS;
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace DataAccess
                     await db.SaveChangesAsync();
 
                     dam.QueryResult = true;
-                    dam.QueryMessage = "Successfully Created Account!";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT;
                     dam.AuthorizationToken = gAuthToken;
                 }
             }
@@ -81,9 +81,9 @@ namespace DataAccess
 
             using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                if (db.AcctAccounts.Any(x => x.EmailAddress == sEmailAddress) == true)
+                if (await db.AcctAccounts.AnyAsync(x => x.EmailAddress == sEmailAddress) == true)
                 {
-                    AcctAccount account = await db.AcctAccounts.Where(x => x.EmailAddress == sEmailAddress).FirstAsync();
+                    AcctAccount account = await db.AcctAccounts.FirstAsync(x => x.EmailAddress == sEmailAddress);
 
                     dam.EmailAddress = account.EmailAddress;
                     dam.PasswordHash = account.Pwhash;
@@ -115,9 +115,9 @@ namespace DataAccess
 
             using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                if (db.AcctAccounts.Any(x => x.EmailAddress == sEmailAddress) == true)
+                if (await db.AcctAccounts.AnyAsync(x => x.EmailAddress == sEmailAddress) == true)
                 {
-                    AcctAccount account = await db.AcctAccounts.Where(x => x.EmailAddress == sEmailAddress).FirstAsync();
+                    AcctAccount account = await db.AcctAccounts.FirstAsync(x => x.EmailAddress == sEmailAddress);
 
                     if (account.AccountVerified ==false)
                     {
@@ -147,9 +147,9 @@ namespace DataAccess
 
             using (CollectMgrContext db = new CollectMgrContext(connectionString))
             {
-                if (db.AcctAccounts.Any(x => x.AuthorizationToken == AuthToken) == true)
+                if (await db.AcctAccounts.AnyAsync(x => x.AuthorizationToken == AuthToken) == true)
                 {
-                    AcctAccount account = await db.AcctAccounts.Where(x => x.AuthorizationToken == AuthToken).FirstAsync();
+                    AcctAccount account = await db.AcctAccounts.FirstAsync(x => x.AuthorizationToken == AuthToken);
 
                     account.AccountVerified = true;
 
