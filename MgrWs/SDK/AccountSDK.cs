@@ -4,13 +4,13 @@ using Microsoft.Data.SqlClient;
 using Shared;
 using SDK;
 using DataAccess.Models;
+using Shared.Statics;
 
 namespace MtgCollectionMgrWs.SDK
 {
     public class AccountSDK
     {
         public string connString { get; set; } = string.Empty;
-
         public string smtpEmail { get; set; } = string.Empty;
         public string smtpPassword { get; set; } = string.Empty;
         public string smtpCallbackURL { get; set; } = string.Empty;
@@ -31,13 +31,13 @@ namespace MtgCollectionMgrWs.SDK
                 connectionString = connString
             };
 
-            damReturnModel result = await dam.CreateAccountAsync(account, sHashedPW);
+            damReturnModel result = await dam.CreateAccountAsync(account, sHashedPW, null);
 
             if (result.QueryResult == false)
             {
-                if (result.QueryMessage!.Contains("Email Already Exists") == false)
+                if (result.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS) == false)
                 {
-                    throw new Exception("Unable to create account, CA_ER1");
+                    throw new Exception(StaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER1);
                 }
             }
             else
@@ -57,7 +57,7 @@ namespace MtgCollectionMgrWs.SDK
             await SMTPHelper.SendEmailForgotPasswordAsync(account, smtpEmail, smtpPassword, smtpCallbackURL);
 
             returnModel.bSuccess = true;
-            returnModel.sMessage = "Forgot Email sent successfully!";
+            returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_FORGOT_EMAIL_SENT_SUCCESS_MESSAGE;
 
             return returnModel;
         }
@@ -79,18 +79,18 @@ namespace MtgCollectionMgrWs.SDK
 
             if (result.QueryResult == false)
             {
-                if (result.QueryMessage!.Contains("Email Does Not Exist") == true)
+                if (result.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = $"No account found for this user: {account.EmailAddress}, please create an account.";
+                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception("Unable to reset password, CA_ER4");
+                    throw new Exception(StaticStrings.DATAACCESS_RESET_PASSWORD_ERROR_CA_ER4);
                 }
             }
             else
@@ -98,7 +98,7 @@ namespace MtgCollectionMgrWs.SDK
                 //successfully reset password
 
                 returnModel.bSuccess = true;
-                returnModel.sMessage = $"Sucessfully reset password for user: {account.EmailAddress}!";
+                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RESET_PASSWORD_SUCCESS_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                 return returnModel;
             }
@@ -120,27 +120,27 @@ namespace MtgCollectionMgrWs.SDK
 
             if (damResult.QueryResult == false)
             {
-                if (damResult.QueryMessage!.Contains("No Login Record") == true)
+                if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_FAILURE) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = $"No account found for this user: {account.EmailAddress}, please create an account.";
+                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
-                else if (damResult.QueryMessage!.Contains("Unverified") == true)
+                else if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED) == true)
                 {
                     //account not verified, deny login
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = $"Account for user: {account.EmailAddress} has not been verified. Please check your email, verify, and try again.";
+                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception("Unable to login, CA_ER2");
+                    throw new Exception(StaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER2);
                 }
             }
             else
@@ -150,14 +150,14 @@ namespace MtgCollectionMgrWs.SDK
                 if (BCrypt.Net.BCrypt.EnhancedVerify(account.UserPW, damResult.PasswordHash) == true)
                 {
                     returnModel.bSuccess = true;
-                    returnModel.sMessage = "Successful Login";
+                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_SUCCESS_MESSAGE;
 
                     //password is valid
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception("Login Credentials are invalid.");
+                    throw new Exception(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_FAILURE_MESSAGE);
                 }
             }
         }
@@ -177,24 +177,24 @@ namespace MtgCollectionMgrWs.SDK
 
             if (damResult.QueryResult == false)
             {
-                if (damResult.QueryMessage!.Contains("No Login Record associated with Auth Token") == true)
+                if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_MATCH_AUTH_TOKEN) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = $"No account found.";
+                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_ACCOUNT_FOUND_MESSAGE;
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception("Unable to login, CA_VF1");
+                    throw new Exception(StaticStrings.DATAACCESS_VERIFY_ERROR_CA_VF1);
                 }
             }
             else
             {
                 returnModel.bSuccess = true;
-                returnModel.sMessage = "Successfully Verified Account.";
+                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_ACCOUNT_MESSAGE;
 
             }
 
@@ -217,7 +217,7 @@ namespace MtgCollectionMgrWs.SDK
                 await SendVerificationEmailAsync(resendVerifyModel, (Guid)damResult.AuthorizationToken!);
 
                 returnModel.bSuccess = true;
-                returnModel.sMessage = "Re-Sent Verification Email.";
+                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_RE_SEND_EMAIL_MESSAGE;
             }
             else
             {

@@ -36,19 +36,19 @@ namespace DataAccess
                     await db.SaveChangesAsync();
 
                     dam.QueryResult = true;
-                    dam.QueryMessage = "Successfully Updated Password!";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_SUCCESS;
                 }
                 else
                 {
                     dam.QueryResult = false;
-                    dam.QueryMessage = "Email Does Not Exist";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE;
                 }
             }
 
             return dam;
         }
 
-        public async Task<damReturnModel> CreateAccountAsync(BaseAccountModel account, string sPWHash)
+        public async Task<damReturnModel> CreateAccountAsync(BaseAccountModel account, string sPWHash, Guid? AuthTokenForTesting)
         {
             damReturnModel dam = new damReturnModel();
 
@@ -61,7 +61,18 @@ namespace DataAccess
                 }
                 else
                 {
-                    Guid gAuthToken = Guid.NewGuid();
+                    Guid gAuthToken;
+
+                    if (AuthTokenForTesting != Guid.Empty)
+                    {
+                        //unit test call, assign GUID
+                        gAuthToken = (Guid)AuthTokenForTesting!;
+                    }
+                    else
+                    {
+                        //real call, generate new guid
+                        gAuthToken = Guid.NewGuid();
+                    }
 
                     db.Add(new AcctAccount { AccountId = Guid.NewGuid(), EmailAddress = account.EmailAddress , Pwhash = sPWHash, AuthorizationToken = gAuthToken });
                     await db.SaveChangesAsync();
@@ -69,6 +80,32 @@ namespace DataAccess
                     dam.QueryResult = true;
                     dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT;
                     dam.AuthorizationToken = gAuthToken;
+                }
+            }
+
+            return dam;
+        }
+
+        public async Task<damReturnModel> DeleteAccountAsync(BaseAccountModel account)
+        {
+            damReturnModel dam = new damReturnModel();
+
+            using (CollectMgrContext db = new CollectMgrContext(connectionString))
+            {
+                AcctAccount? AccountToRemove = await db.AcctAccounts.FirstOrDefaultAsync(x => x.EmailAddress == account.EmailAddress);
+
+                if (AccountToRemove != null)
+                {
+                    db.Remove(AccountToRemove);
+                    await db.SaveChangesAsync();
+
+                    dam.QueryResult = true;
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DELETED;
+                }
+                else
+                {
+                    dam.QueryResult = false;
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DOES_NOT_EXIST;
                 }
             }
 
@@ -91,18 +128,18 @@ namespace DataAccess
                     if (account.AccountVerified == false)
                     {
                         dam.QueryResult = false;
-                        dam.QueryMessage = "Unverified";
+                        dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED;
                     }
                     else
                     {
                         dam.QueryResult = true;
-                        dam.QueryMessage = "Retrieved Login Record";
+                        dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_SUCCESS;
                     }
                 }
                 else
                 {
                     dam.QueryResult = false;
-                    dam.QueryMessage = "No Login Record";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_FAILURE;
                 }
             }
 
@@ -128,13 +165,13 @@ namespace DataAccess
                     else
                     {
                         dam.QueryResult = true;
-                        dam.QueryMessage = "Already Verified";
+                        dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_ALREADY_VERIFIED;
                     }
                 }
                 else
                 {
                     dam.QueryResult = false;
-                    dam.QueryMessage = "No Login Record associated with Auth Token";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_MATCH_AUTH_TOKEN;
                 }
             }
 
@@ -156,11 +193,12 @@ namespace DataAccess
                     await db.SaveChangesAsync();
 
                     dam.QueryResult = true;
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESLT_ACCOUNT_VERIFY_SUCCESS;
                 }
                 else
                 {
                     dam.QueryResult = false;
-                    dam.QueryMessage = "No Login Record associated with Auth Token";
+                    dam.QueryMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_MATCH_AUTH_TOKEN;
                 }
             }
 
