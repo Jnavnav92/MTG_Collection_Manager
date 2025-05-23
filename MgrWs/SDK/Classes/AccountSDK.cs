@@ -1,16 +1,15 @@
 ﻿using Shared.Models;
-using DataAccess;
 using Microsoft.Data.SqlClient;
 using Shared;
-using SDK;
 using DataAccess.Models;
 using Shared.Statics;
+using DataAccess.Classes;
+using SDK.Models;
 
-namespace MtgCollectionMgrWs.SDK
+namespace SDK.Classes
 {
-    public class AccountSDK
+    public class AccountSDK : BaseSDK
     {
-        public string connString { get; set; } = string.Empty;
         public string smtpEmail { get; set; } = string.Empty;
         public string smtpPassword { get; set; } = string.Empty;
         public string smtpCallbackURL { get; set; } = string.Empty;
@@ -26,7 +25,7 @@ namespace MtgCollectionMgrWs.SDK
 
             string sHashedPW = await PWManager.HashPasswordAsync(account.UserPW);
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = connString
             };
@@ -35,9 +34,9 @@ namespace MtgCollectionMgrWs.SDK
 
             if (result.QueryResult == false)
             {
-                if (result.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS) == false)
+                if (result.QueryMessage!.Contains(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS) == false)
                 {
-                    throw new Exception(StaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER1);
+                    throw new Exception(AuthStaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER1);
                 }
             }
             else
@@ -57,7 +56,7 @@ namespace MtgCollectionMgrWs.SDK
             await SMTPHelper.SendEmailForgotPasswordAsync(account, smtpEmail, smtpPassword, smtpCallbackURL);
 
             returnModel.bSuccess = true;
-            returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_FORGOT_EMAIL_SENT_SUCCESS_MESSAGE;
+            returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_FORGOT_EMAIL_SENT_SUCCESS_MESSAGE;
 
             return returnModel;
         }
@@ -70,7 +69,7 @@ namespace MtgCollectionMgrWs.SDK
 
             string sHashedPW = await PWManager.HashPasswordAsync(account.UserPW);
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = connString
             };
@@ -79,18 +78,18 @@ namespace MtgCollectionMgrWs.SDK
 
             if (result.QueryResult == false)
             {
-                if (result.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE) == true)
+                if (result.QueryMessage!.Contains(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
+                    returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(AuthStaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception(StaticStrings.DATAACCESS_RESET_PASSWORD_ERROR_CA_ER4);
+                    throw new Exception(AuthStaticStrings.DATAACCESS_RESET_PASSWORD_ERROR_CA_ER4);
                 }
             }
             else
@@ -98,7 +97,7 @@ namespace MtgCollectionMgrWs.SDK
                 //successfully reset password
 
                 returnModel.bSuccess = true;
-                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RESET_PASSWORD_SUCCESS_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
+                returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RESET_PASSWORD_SUCCESS_MESSAGE.Replace(AuthStaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                 return returnModel;
             }
@@ -111,7 +110,7 @@ namespace MtgCollectionMgrWs.SDK
 
             SDK_Auth_Return_Model returnModel = new SDK_Auth_Return_Model();
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = connString
             };
@@ -120,27 +119,27 @@ namespace MtgCollectionMgrWs.SDK
 
             if (damResult.QueryResult == false)
             {
-                if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_FAILURE) == true)
+                if (damResult.QueryMessage!.Contains(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_FAILURE) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
+                    returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE.Replace(AuthStaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
-                else if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED) == true)
+                else if (damResult.QueryMessage!.Contains(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED) == true)
                 {
                     //account not verified, deny login
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED_MESSAGE.Replace(StaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
+                    returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED_MESSAGE.Replace(AuthStaticStrings.DATAACCESS_TOKEN_EMAIL_ADDRESS, account.EmailAddress);
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception(StaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER2);
+                    throw new Exception(AuthStaticStrings.DATAACCESS_LOGIN_ERROR_CA_ER2);
                 }
             }
             else
@@ -150,14 +149,14 @@ namespace MtgCollectionMgrWs.SDK
                 if (BCrypt.Net.BCrypt.EnhancedVerify(account.UserPW, damResult.PasswordHash) == true)
                 {
                     returnModel.bSuccess = true;
-                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_SUCCESS_MESSAGE;
+                    returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_SUCCESS_MESSAGE;
 
                     //password is valid
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_FAILURE_MESSAGE);
+                    throw new Exception(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_LOGIN_FAILURE_MESSAGE);
                 }
             }
         }
@@ -168,7 +167,7 @@ namespace MtgCollectionMgrWs.SDK
 
             SDK_Auth_Return_Model returnModel = new SDK_Auth_Return_Model();
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = connString
             };
@@ -177,24 +176,24 @@ namespace MtgCollectionMgrWs.SDK
 
             if (damResult.QueryResult == false)
             {
-                if (damResult.QueryMessage!.Contains(StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_MATCH_AUTH_TOKEN) == true)
+                if (damResult.QueryMessage!.Contains(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_MATCH_AUTH_TOKEN) == true)
                 {
                     //login doesn't exist
 
                     returnModel.bSuccess = false;
-                    returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_ACCOUNT_FOUND_MESSAGE;
+                    returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NO_ACCOUNT_FOUND_MESSAGE;
 
                     return returnModel;
                 }
                 else
                 {
-                    throw new Exception(StaticStrings.DATAACCESS_VERIFY_ERROR_CA_VF1);
+                    throw new Exception(AuthStaticStrings.DATAACCESS_VERIFY_ERROR_CA_VF1);
                 }
             }
             else
             {
                 returnModel.bSuccess = true;
-                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_ACCOUNT_MESSAGE;
+                returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_ACCOUNT_MESSAGE;
 
             }
 
@@ -205,7 +204,7 @@ namespace MtgCollectionMgrWs.SDK
         {
             SDK_Auth_Return_Model returnModel = new SDK_Auth_Return_Model();
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = connString
             };
@@ -217,7 +216,7 @@ namespace MtgCollectionMgrWs.SDK
                 await SendVerificationEmailAsync(resendVerifyModel, (Guid)damResult.AuthorizationToken!);
 
                 returnModel.bSuccess = true;
-                returnModel.sMessage = StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_RE_SEND_EMAIL_MESSAGE;
+                returnModel.sMessage = AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_VERIFIED_RE_SEND_EMAIL_MESSAGE;
             }
             else
             {

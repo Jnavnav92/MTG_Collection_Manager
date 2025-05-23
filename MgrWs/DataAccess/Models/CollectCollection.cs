@@ -16,7 +16,11 @@ public partial class CollectCollection
     [Column("AccountID")]
     public Guid AccountId { get; set; }
 
-    [StringLength(500)]
+    /// <summary>
+    /// Collection Name + CollectionID is the primary key, but foreign key in Collect_Cards needs to map to CollectionID so a composite key isn't a good fit.
+    /// code will have to maintain uniqueness of this value.
+    /// </summary>
+    [StringLength(100)]
     public string CollectionName { get; set; } = null!;
 
     [ForeignKey("AccountId")]

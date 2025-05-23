@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Data;
 
-public partial class CollectMgrContext : DbContext
+public partial class CollectionMgrContext : DbContext
 {
     private readonly string connectionString;
-    public CollectMgrContext(string connString): base()
+    public CollectionMgrContext(string connString) : base()
     {
         connectionString = connString;
     }
 
-    public CollectMgrContext(DbContextOptions<CollectMgrContext> options)
+    public CollectionMgrContext(DbContextOptions<CollectionMgrContext> options)
         : base(options)
     {
     }
@@ -34,7 +33,6 @@ public partial class CollectMgrContext : DbContext
             base.OnConfiguring(optionsBuilder);
         }
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AcctAccount>(entity =>
@@ -52,7 +50,7 @@ public partial class CollectMgrContext : DbContext
 
             entity.HasOne(d => d.Collection).WithMany(p => p.CollectCards)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cards_Collections_CollectionID");
+                .HasConstraintName("FK_Cards_Collection_CollectionID");
         });
 
         modelBuilder.Entity<CollectCollection>(entity =>

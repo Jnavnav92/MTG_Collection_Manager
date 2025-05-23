@@ -1,33 +1,71 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DataAccess;
 using Microsoft.Extensions.Configuration;
 using DataAccess.Models;
 using Shared;
 using Shared.Models;
 using Shared.Statics;
-using MtgCollectionMgrWs.Tests;
+using DataAccess.Classes;
+using MtgCollectionMgrWs.Tests.Shared;
+using System.Text;
 
-namespace DataAccess.Tests
+namespace MtgCollectionMgrWs.Tests.TestClasses
 {
     [TestClass()]
-    public class DataAccess_Tests
+    public class AuthDataAccess_Tests : BaseTestClass
     {
-        IConfigurationRoot? _config;
-        BaseAccountModel? newAccount;
-        string? PasswordHash;
-        Guid gTestAccountAuthToken = Guid.Parse("5D24875C-7D0D-4C93-BB60-77ECF428443A");
-        static object oLockerObject = new object();
+        private Guid gTestAccountAuthToken = Guid.Parse("5D24875C-7D0D-4C93-BB60-77ECF428443A");
+        private const string UNIT_TEST_ACCOUNT_ALWAYS_EXIST = "TestAlwaysExist@test.test";
+        private const string UNIT_TEST_PASSWORD_HASH_ALWAYS_EXIST = "$2a$15$poycy7JGlgzUSlrL4SBPEOoXQ8/RhInXUIZ0KTf0BrQh1X321Y9Oa";
 
-        public DataAccess_Tests()
+        public AuthDataAccess_Tests() : base()
         {
-            _config = new ConfigurationBuilder()
-            .AddUserSecrets<DataAccess_Tests>()
-            .Build();
+
+        }
+
+        /// <summary>
+        /// This account should always exist in the database for unit tests outside the auth unit tests.
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod()]
+        [DoNotParallelize]
+        public async Task A_CreateAccountAsyncTest_CreateAlwaysExistAccount_Success()
+        {
+            //Arrange
+            string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
+
+            BaseAccountModel testAccount = new BaseAccountModel()
+            {
+                EmailAddress = UNIT_TEST_ACCOUNT_ALWAYS_EXIST
+            };
+
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
+            {
+                connectionString = sConnectionString
+            };
+
+            //act
+            damReturnModel result = await dam.CreateAccountAsync(testAccount, UNIT_TEST_PASSWORD_HASH_ALWAYS_EXIST, gAlwaysExistTestAccountAuthToken);
+
+            //assert
+
+            if (result.QueryResult == false && result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS)
+            {
+                //always exist account already exists, that's fine.
+            }
+            else if (result.QueryResult == true && result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT)
+            {
+                //always exist test account did not exist and we created it, that's fine.
+            }
+            else
+            {
+                //something else happened that's bad, throw an exception and fail the test.
+                throw new Exception(string.Format(AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ALWAYS_EXIST_ACCOUNT_ERROR, result.QueryMessage));
+            }
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task A_CreateAccountAsyncTest_Success()
+        public async Task B_CreateAccountAsyncTest_Success()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -37,7 +75,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -47,12 +85,12 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == true);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task B_CreateAccountAsyncTest_Email_Already_Exists()
+        public async Task C_CreateAccountAsyncTest_Email_Already_Exists()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -62,7 +100,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -72,17 +110,17 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == false);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task C_GetLoginRecordAsync_Unverified_Test()
+        public async Task D_GetLoginRecordAsync_Unverified_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -92,12 +130,12 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == false);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task D_GetAuthTokenForReVerifyTest()
+        public async Task E_GetAuthTokenForReVerifyTest()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -107,7 +145,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -122,7 +160,7 @@ namespace DataAccess.Tests
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task E_VerifyAccountAsyncTest()
+        public async Task F_VerifyAccountAsyncTest()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -132,7 +170,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -142,17 +180,17 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == true);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESLT_ACCOUNT_VERIFY_SUCCESS);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESLT_ACCOUNT_VERIFY_SUCCESS);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task F_GetLoginRecordAsync_Verified_Test()
+        public async Task G_GetLoginRecordAsync_Verified_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -162,13 +200,13 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == true);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_SUCCESS);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RETRIEVE_SUCCESS);
         }
 
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task G_UpdatePasswordAsync_FoundAccount_Test()
+        public async Task H_UpdatePasswordAsync_FoundAccount_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -178,7 +216,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -188,12 +226,12 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == true);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_SUCCESS);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_SUCCESS);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task H_UpdatePasswordAsync_NoAccount_Test()
+        public async Task I_UpdatePasswordAsync_NoAccount_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -203,7 +241,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_NO_FOUND_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -213,12 +251,12 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == false);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UPDATE_PASSWORD_FAILURE);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task I_DeleteAccountAsync_FoundAccount_Test()
+        public async Task J_DeleteAccountAsync_FoundAccount_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -228,7 +266,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -238,12 +276,12 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == true);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DELETED);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DELETED);
         }
 
         [TestMethod()]
         [DoNotParallelize]
-        public async Task J_DeleteAccountAsync_NoAccount_Test()
+        public async Task K_DeleteAccountAsync_NoAccount_Test()
         {
             //Arrange
             string sConnectionString = _config[UnitTestingStatics.UNIT_TEST_SECRET_CONN_STRING_NAME];
@@ -253,7 +291,7 @@ namespace DataAccess.Tests
                 EmailAddress = UnitTestingStatics.UNIT_TEST_NO_FOUND_EMAIL
             };
 
-            DataAccessMethods dam = new DataAccessMethods()
+            AuthDataAccessMethods dam = new AuthDataAccessMethods()
             {
                 connectionString = sConnectionString
             };
@@ -263,7 +301,7 @@ namespace DataAccess.Tests
 
             //assert
             Assert.IsTrue(result.QueryResult == false);
-            Assert.IsTrue(result.QueryMessage == StaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DOES_NOT_EXIST);
+            Assert.IsTrue(result.QueryMessage == AuthStaticStrings.DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_DOES_NOT_EXIST);
         }
     }
 }

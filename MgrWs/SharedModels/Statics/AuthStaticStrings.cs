@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Shared.Statics
 {
-    public static class StaticStrings
+    public static class AuthStaticStrings
     {
+        public const string DATAACCESS_RESPONSEQUERY_RESULT_ALWAYS_EXIST_ACCOUNT_ERROR = "Error creating 'always-exist' test account. Result Message: {0} ";
+
         public const string DATAACCESS_RESPONSEQUERY_RESULT_CREATED_ACCOUNT = "Successfully Created Account";
         public const string DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_EXISTS = "Email Already Exists";
 
@@ -25,7 +27,6 @@ namespace Shared.Statics
         public const string DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_NOACCOUNT_MESSAGE = "No account found for this user: #EMAIL_ADDRESS#, please create an account.";
         public const string DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_UNVERIFIED_MESSAGE = $"Account for user: #EMAIL_ADDRESS# has not been verified. Please check your email, verify, and try again.";
         public const string DATAACCESS_RESPONSEQUERY_RESULT_ACCOUNT_RESET_PASSWORD_SUCCESS_MESSAGE = $"Sucessfully reset password for user: #EMAIL_ADDRESS#!";
-
 
         public const string DATAACCESS_TOKEN_EMAIL_ADDRESS = "#EMAIL_ADDRESS#";
 
